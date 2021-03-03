@@ -1,8 +1,7 @@
-require "highline"
+require 'highline'
 require 'yaml'
 
 class AnalyzedString
-
   def start_process?
     # yかnが入力されるまでループする
     while true
@@ -20,7 +19,7 @@ class AnalyzedString
       else
         puts '1文字で入力してください。'
       end
-    end	
+    end
   end
 
   def string_check(set_string, string_length, usable_chars)
@@ -35,7 +34,7 @@ class AnalyzedString
         break
       end
     end
-    return error_msg
+    error_msg
   end
 
   def make_check_string(usable_chars, target_string, string_length)
@@ -72,7 +71,7 @@ class AnalyzedString
   # 解析する文字列の長さ
   string_length = config['string_langth']
   # コンソールにメッセージ表示(コンソール上はアスタリスク表示)
-  set_string = highline.ask('文字列を設定してください') {|q| q.echo = '*' }
+  set_string = highline.ask('文字列を設定してください') { |q| q.echo = '*' }
   # 文字列のエラーチェック
   error_msg = analyzed_string.string_check(set_string, string_length, usable_chars)
   # エラーがあったらエラーメッセージを出して処理終了

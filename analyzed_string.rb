@@ -1,10 +1,11 @@
 require 'highline'
 require 'yaml'
 
+# 文字列解析
 class AnalyzedString
   def start_process?
     # yかnが入力されるまでループする
-    while true
+    loop do
       print '文字列解析を始めますか? [y|n]:'
       response = gets.chomp!
       if response.length == 1
@@ -29,7 +30,7 @@ class AnalyzedString
     error_msg.push("文字列は#{string_length}文字で設定してください。") if set_string.length != string_length
     # 使用可能文字以外が使用されていないか
     set_string.length.times do |num|
-      if !usable_chars.include?(set_string.slice(num))
+      unless usable_chars.include?(set_string.slice(num))
         error_msg.push("文字列に使用可能文字以外が設定されています。使用可能文字:#{usable_chars}")
         break
       end
@@ -49,11 +50,11 @@ class AnalyzedString
       if target_string.slice(num) != usable_chars.slice(usable_chars.length - 1)
         # 最後の文字でなければ現在の文字の次に記載されている文字に変更する
         usable_chars.length.times do |num2|
-          if target_string.slice(num) == usable_chars.slice(num2)
-            target_string.slice!(num)
-            target_string.insert(num, usable_chars.slice(num2 + 1))
-            return target_string
-          end
+          next unless target_string.slice(num) == usable_chars.slice(num2)
+
+          target_string.slice!(num)
+          target_string.insert(num, usable_chars.slice(num2 + 1))
+          return target_string
         end
       # 使用可能文字の最後の文字なら最初の文字に戻す
       else
@@ -75,12 +76,12 @@ class AnalyzedString
   # 文字列のエラーチェック
   error_msg = analyzed_string.string_check(set_string, string_length, usable_chars)
   # エラーがあったらエラーメッセージを出して処理終了
-  if !error_msg.empty?
+  unless error_msg.empty?
     puts error_msg
     exit
   end
   # 処理をするかどうかをコンソール上に表示
-  if !analyzed_string.start_process?
+  unless analyzed_string.start_process?
     # falseなら処理終了
     puts '処理を終了します。'
     exit
@@ -92,7 +93,7 @@ class AnalyzedString
   # 処理件数
   count = 0
   # 解析終わるまでループ
-  while true
+  loop do
     target_string = analyzed_string.make_check_string(usable_chars, target_string, string_length)
     count += 1
     puts "#{count}: #{target_string}"
